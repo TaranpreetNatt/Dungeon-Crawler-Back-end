@@ -1,0 +1,6 @@
+{
+  "clientID": "dungeon_client_id",
+  "clientSecret": "dungeon_client_secret",
+  "db": "dungeon_db",
+  "jwtPrivateKey": "dungeon_jwt_key"
+}
