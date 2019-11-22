@@ -18,8 +18,10 @@ router.post('/login', async (req, res) => {
   const validPassword = await bcrypt.compare(req.body.password, user.local.password);
   if (!validPassword) return res.status(400).send('Invalid password');
 
-  const token = user.generateAuthToken();
-  res.send(token);
+  req.session.loggedin = true;
+  req.session.secret = config.get('sessionSecret');
+  req.session.email = req.body.email;
+  res.redirect('http://localhost:3000/demo');
 });
 
 // local registration
@@ -52,8 +54,11 @@ router.post('/register', async (req, res) => {
       console.log('err');
   });
 
-  const token = user.generateAuthToken();
-  res.send(token);
+  req.session.loggedin = true;
+  req.session.secret = config.get('sessionSecret');
+  req.session.name = req.body.name;
+  req.session.email = req.body.email;
+  res.redirect('http://localhost:3000/demo');
 });
 
 // If user wants to login with google
@@ -64,10 +69,10 @@ router.get('/google', passport.authenticate('google', {
 // this is handeled on the backend
 router.get('/google/redirect', passport.authenticate('google', { session: false }), (req, res) => {
   const { name, email } = req.user.google;
-  console.log(name, email);
+  // console.log(name, email);
   // const token = user.generateAuthToken();
   req.session.loggedin = true;
-  req.session.secret = config.get('jwtPrivateKey');
+  req.session.secret = config.get('sessionSecret');
   req.session.name = name;
   req.session.email = email;
   res.redirect('http://localhost:3000/demo');
