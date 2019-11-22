@@ -2,13 +2,16 @@
   "name": "game",
   "version": "1.0.0",
   "description": "",
+  "jest": {
+    "testURL": "http://localhost/"
+  },
   "engines": {
     "node": "12.x"
   },
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node test.js"
+    "test": "jest --watchAll --verbose --coverage"
   },
   "dependencies": {
     "alert-node": "^2.0.1",
@@ -29,7 +32,9 @@
     "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
+    "jest": "^24.9.0",
     "request": "^2.81.0",
+    "supertest": "^3.0.0",
     "tape": "^4.7.0"
   },
   "repository": {

@@ -6,7 +6,6 @@ const axios = require('axios')
 const config = require('config');
 const passportSetup = require('./back-end/oauthStrategy/passport-google-strategy');
 const authRoute = require('./back-end/routes/auth');
-const { auth, loggedInAlert } = require('./back-end/middleware/auth');
 
 const PORT = process.env.PORT || 3000
 const app = express();
@@ -27,7 +26,10 @@ app.use(session({
 }));
 
 // db connection
-const db = config.get('db');
+// const db = config.get('db');
+
+// test db
+const db = "mongodb://localhost/dungeonCrawler_test";
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
   .then(() => {
     console.log(`Connected to ${db}...`);
@@ -36,7 +38,20 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
     console.log('Could not connect to mongodb', err);
   });
 
-app.listen(PORT, () => console.log(`Listening on ${ PORT }...`));
+const server = app.listen(PORT, () => console.log(`Listening on ${ PORT }...`));
+
+/*** Authentication & Authorization Middleware ***/
+const auth = function(req, res, next) {
+    if (req.session && req.session.loggedin && req.session.email) return next();
+    else return res.status(401).send("Unauthorized. Please log in and try again.");;
+};
+
+const loggedInAlert = function(req, res, next) {
+    // console.log(req.session);
+    if (req.session.loggedin) return res.send("Already logged-in. Please logout first or return back home.");
+    else return next();
+};
+/*******/
 
 /*** Views Rendering ***/
 app.set('views', path.join(__dirname, 'views'));
@@ -55,3 +70,5 @@ app.get('/logout', function (req, res) {
 app.get('/demo', auth, (req, res) => res.render("pages/demo"));
 
 app.use('/auth', authRoute);
+
+module.exports = server;
