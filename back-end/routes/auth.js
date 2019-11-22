@@ -6,8 +6,11 @@ const _ = require('lodash');
 const session = require('express-session');
 // const auth = require('../middleware/auth');
 const { User, validateUser, validateUserLogin } = require('../models/user');
-const router = express.Router();
 
+const router = express.Router();
+const day = 86400000;
+
+// local registration
 router.post('/login', async (req, res) => {
   const { error } = validateUserLogin(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -21,6 +24,7 @@ router.post('/login', async (req, res) => {
   req.session.loggedin = true;
   req.session.secret = config.get('sessionSecret');
   req.session.email = req.body.email;
+  req.session.cookie.expires = new Date(Date.now() + day);
   res.redirect('http://localhost:3000/demo');
 });
 
@@ -58,6 +62,7 @@ router.post('/register', async (req, res) => {
   req.session.secret = config.get('sessionSecret');
   req.session.name = req.body.name;
   req.session.email = req.body.email;
+  req.session.cookie.expires = new Date(Date.now() + day);
   res.redirect('http://localhost:3000/demo');
 });
 
@@ -75,6 +80,7 @@ router.get('/google/redirect', passport.authenticate('google', { session: false 
   req.session.secret = config.get('sessionSecret');
   req.session.name = name;
   req.session.email = email;
+  req.session.cookie.expires = new Date(Date.now() + day);
   res.redirect('http://localhost:3000/demo');
 });
 

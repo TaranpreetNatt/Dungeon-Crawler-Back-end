@@ -51,10 +51,4 @@
 
         $(thisAlert).removeClass('alert-validate');
     }
-
-
-<<<<<<< HEAD
 })(jQuery);
-=======
-})(jQuery);
->>>>>>> b64201a2a7f061146815ca7b602f247d9581bc1e
