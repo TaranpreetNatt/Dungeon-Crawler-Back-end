@@ -38,19 +38,6 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }...`));
 
-/*** Authentication & Authorization Middleware ***/
-// const auth = function(req, res, next) {
-//     if (req.session && req.session.loggedin && req.session.email) return next();
-//     else return res.status(401).send("Unauthorized. Please log in and try again.");;
-// };
-
-// const loggedInAlert = function(req, res, next) {
-//     // console.log(req.session);
-//     if (req.session.loggedin) return res.send("Already logged-in. Please logout first or return back home.");
-//     else return next();
-// };
-/*******/
-
 /*** Views Rendering ***/
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
